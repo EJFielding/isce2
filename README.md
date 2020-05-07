@@ -152,6 +152,7 @@ py36-scipy +gcc7 +openblas
 py36-matplotlib +cairo +tkinter
 py36-matplotlib-basemap
 py36-h5py
+py36-gdal
 ```
 
 ### Python3 Convention
@@ -629,13 +630,16 @@ The inputs are Sentinel GRD zipfiles
 <rtcApp>
     <constant name="dir">/Users/data/sentinel1 </constant>
     <component name="rtcApp">
-        <property name="posting">20</property>
         <property name="sensor name">sentinel1</property>
+        <property name="posting">100</property>
+        <property name="polarizations">[VV, VH]</property>
+        <property name="epsg id">32618</property>
+        <property name="geocode spacing">100</property>
+        <property name="geocode interpolation method">bilinear</property>
         <component name="master">
         <property name="safe">$dir$/rtcApp/data/S1A_IW_GRDH_1SDV_20181221T225104_20181221T225129_025130_02C664_B46C.zip</property>
         <property name="orbit directory">$dir$/orbits</property>
         <property name="output directory">$dir$/rtcApp/output</property>
-        <property name="polarization">[VV, VH]</property>
         </component>
     </component>
 </rtcApp>

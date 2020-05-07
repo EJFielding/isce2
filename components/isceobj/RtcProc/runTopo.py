@@ -46,8 +46,7 @@ def runTopo(self, method='legendre'):
     demImg.load(demname + '.xml')
 
 
-    if not os.path.isdir(self._grd.geometryFolder):
-        os.makedirs(self._grd.geometryFolder)
+    os.makedirs(self._grd.geometryFolder, exist_ok=True)
 
 
     #####Run Topo
@@ -110,5 +109,4 @@ def runSimamp(outdir, hname='z.rdr'):
     simImage.renderHdr()
     hgtImage.finalizeImage()
     simImage.finalizeImage()
-
 

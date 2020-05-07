@@ -91,10 +91,12 @@ IEEE Transactions on Geoscience and Remote Sensing, vol. 56, no. 8, pp. 4492-450
     rm *.hgt* *.log demLat_*_*_Lon_*_*.dem demLat_*_*_Lon_*_*.dem.vrt demLat_*_*_Lon_*_*.dem.xml
     cd ../
 
-    #water body. ATTENTION: DON'T USE wbd.py TO DOWNLOAD WATER BODY!!!
+    #water body
+    #do correct missing water body tiles problem here!!! check usage of wbd.py for more details,
+    #or simply follow the commands below
     mkdir wbd_1_arcsec
     cd wbd_1_arcsec
-    wbd_with_correction.py 29 37 125 133
+    wbd.py 29 37 125 133
     fixImageXml.py -i swbdLat_*_*_Lon_*_*.wbd -f
     cd ../
     ==========================================================================================-->
@@ -103,14 +105,15 @@ IEEE Transactions on Geoscience and Remote Sensing, vol. 56, no. 8, pp. 4492-450
 
     <!--=========================================================================================
     this water body is used to create water body in radar coordinate used in processing.
-    radar-coordinate water body is created two times in runRdr2Geo.py and runLook.py, 
-    respectively. radar-coordinate water body is used in:
+    radar-coordinate water body is created three times in runRdr2Geo.py, runLook.py and 
+    runIonUwrap.py, respectively. radar-coordinate water body is used in:
     (1) determining the number of offsets in slc offset estimation, and radar/dem offset 
         estimation
     (2) masking filtered interferogram or unwrapped interferogram
     (3) determining the number of offsets in slc residual offset estimation after geometric 
         offset computation in coregistering slcs in dense offset.
     (4) masking dense offset field
+    (5) mask coherence in ionosphere fitting and filtering
     ==========================================================================================-->
     <!--<property name="water body">None</property>-->
 
