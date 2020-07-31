@@ -23,7 +23,7 @@ def runRdrDemOffset(self):
     catalog = isceobj.Catalog.createCatalog(self._insar.procDoc.name)
     self.updateParamemetersFromUser()
 
-    masterTrack = self._insar.loadTrack(master=True)
+    referenceTrack = self._insar.loadTrack(reference=True)
     demFile = os.path.abspath(self._insar.dem)
 
     insarDir = 'insar'
@@ -44,16 +44,16 @@ def runRdrDemOffset(self):
 
     #number of looks to take in range
     if self._insar.numberRangeLooksSim == None:
-        if self._insar.numberRangeLooks1 * masterTrack.rangePixelSize > demDeltaLon:
+        if self._insar.numberRangeLooks1 * referenceTrack.rangePixelSize > demDeltaLon:
             self._insar.numberRangeLooksSim = 1
         else:
-            self._insar.numberRangeLooksSim = int(demDeltaLon / (self._insar.numberRangeLooks1 * masterTrack.rangePixelSize) + 0.5)
+            self._insar.numberRangeLooksSim = int(demDeltaLon / (self._insar.numberRangeLooks1 * referenceTrack.rangePixelSize) + 0.5)
     #number of looks to take in azimuth
     if self._insar.numberAzimuthLooksSim == None:
-        if self._insar.numberAzimuthLooks1 * masterTrack.azimuthPixelSize > demDeltaLat:
+        if self._insar.numberAzimuthLooks1 * referenceTrack.azimuthPixelSize > demDeltaLat:
             self._insar.numberAzimuthLooksSim = 1
         else:
-            self._insar.numberAzimuthLooksSim = int(demDeltaLat / (self._insar.numberAzimuthLooks1 * masterTrack.azimuthPixelSize) + 0.5)
+            self._insar.numberAzimuthLooksSim = int(demDeltaLat / (self._insar.numberAzimuthLooks1 * referenceTrack.azimuthPixelSize) + 0.5)
 
     #simulate a radar image using dem
     simulateRadar(os.path.join('../', self._insar.height), self._insar.sim, scale=3.0, offset=100.0)
@@ -98,6 +98,8 @@ def runRdrDemOffset(self):
         print('do not estimate offsets between radar and dem\n\n')
         self._insar.radarDemAffineTransform = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
         catalog.addItem('warning message', 'land area too small for estimating offsets between radar and dem', 'runRdrDemOffset')
+
+        os.chdir('../../')
 
         catalog.printToLog(logger, "runRdrDemOffset")
         self._insar.procDoc.addAllFromCatalog(catalog)
@@ -148,8 +150,8 @@ def runRdrDemOffset(self):
     ampcor.setImageDataType1('real')
     ampcor.setImageDataType2('real')
 
-    ampcor.setMasterSlcImage(mMag)
-    ampcor.setSlaveSlcImage(sMag)
+    ampcor.setReferenceSlcImage(mMag)
+    ampcor.setSecondarySlcImage(sMag)
 
     #MATCH REGION
     rgoff = 0
@@ -246,6 +248,8 @@ def runRdrDemOffset(self):
         print('do not estimate offsets between radar and dem\n\n')
         self._insar.radarDemAffineTransform = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
         catalog.addItem('warning message', 'too few points left after culling, {} left'.format(numCullOffsets), 'runRdrDemOffset')
+
+        os.chdir('../../')
 
         catalog.printToLog(logger, "runRdrDemOffset")
         self._insar.procDoc.addAllFromCatalog(catalog)
